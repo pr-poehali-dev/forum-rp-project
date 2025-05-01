@@ -1,33 +1,34 @@
+import React from 'react';
+import * as LucideIcons from 'lucide-react';
 
-import React from "react";
-import { LucideProps, icons } from "lucide-react";
-import { cn } from "@/lib/utils";
-
-export interface IconProps extends Omit<LucideProps, "ref"> {
-  name: keyof typeof icons;
+type IconProps = {
+  name: string;
   color?: string;
   size?: number;
-  strokeWidth?: number;
-  fallback?: keyof typeof icons;
-}
+  className?: string;
+  fallback?: string;
+  onClick?: () => void;
+};
 
-const Icon = React.forwardRef<SVGSVGElement, IconProps>(
-  ({ className, name, color, size = 24, strokeWidth = 2, fallback = "CircleAlert", ...props }, ref) => {
-    const LucideIcon = icons[name] || icons[fallback];
+const Icon: React.FC<IconProps> = ({ 
+  name, 
+  color, 
+  size = 24, 
+  className = "", 
+  fallback = "CircleAlert",
+  onClick
+}) => {
+  // @ts-ignore - we're checking if the icon exists dynamically
+  const LucideIcon = LucideIcons[name] || LucideIcons[fallback];
 
-    return (
-      <LucideIcon
-        ref={ref}
-        className={cn("", className)}
-        color={color}
-        size={size}
-        strokeWidth={strokeWidth}
-        {...props}
-      />
-    );
-  }
-);
-
-Icon.displayName = "Icon";
+  return (
+    <LucideIcon
+      color={color}
+      size={size}
+      className={className}
+      onClick={onClick}
+    />
+  );
+};
 
 export default Icon;
